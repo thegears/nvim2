@@ -1,3 +1,4 @@
+vim.o.guifont = "Source Code Pro:h7"
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 local set = vim.opt -- set options
@@ -156,7 +157,11 @@ require('lazy').setup({
 				},
 			})
 		end
-	}
+	},
+	{
+		"onsails/lspkind.nvim",
+		enabled = vim.g.icons_enabled,
+	},
 
 })
 
@@ -178,8 +183,19 @@ require('mason-lspconfig').setup({
 require('nvim-ts-autotag').setup()
 
 local cmp = require 'cmp'
+local lspkind = require 'lspkind'
+
+
+local border_opts = {
+	border = "rounded",
+	winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
+}
 
 cmp.setup {
+	window = {
+		completion = cmp.config.window.bordered(border_opts),
+		documentation = cmp.config.window.bordered(border_opts),
+	},
 	mapping = cmp.mapping.preset.insert {
 		['<Tab>'] = cmp.mapping(function(fallback)
 			if cmp.visible() then
@@ -192,7 +208,18 @@ cmp.setup {
 			behavior = cmp.ConfirmBehavior.Replace,
 			select = true,
 		},
-	}
+	},
+	formatting = {
+		fields = { "kind", "abbr", "menu" },
+		format = function(entry, vim_item)
+			local kind = require("lspkind").cmp_format({ mode = "symbol", maxwidth = 50 })(entry, vim_item)
+			local strings = vim.split(kind.kind, "%s", { trimempty = true })
+			kind.kind = " " .. (strings[1] or "") .. " "
+
+			return kind
+		end,
+	},
+
 }
 
 require "lsp_signature".setup()
