@@ -124,25 +124,6 @@ require('lazy').setup({
 		opts = {},
 		config = function(_, opts) require 'lsp_signature'.setup(opts) end
 	},
-
-
-	{
-		"yamatsum/nvim-cursorline",
-		config = function()
-			require('nvim-cursorline').setup {
-				cursorline = {
-					enable = true,
-					timeout = 0,
-					number = true,
-				},
-				cursorword = {
-					enable = true,
-					min_length = 3,
-					hl = { underline = true },
-				}
-			}
-		end
-	},
 	{
 		"onsails/lspkind.nvim",
 		enabled = vim.g.icons_enabled,
