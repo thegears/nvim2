@@ -147,7 +147,22 @@ require('lazy').setup({
 		"onsails/lspkind.nvim",
 		enabled = vim.g.icons_enabled,
 	},
-
+	{
+		'tomiis4/BufferTabs.nvim',
+		dependencies = {
+			'nvim-tree/nvim-web-devicons', -- optional
+		},
+		lazy = false,
+		config = function()
+			require('buffertabs').setup({
+				horizontal = "right",
+				icons = true,
+				border = "single",
+				padding = 0,
+				display = "column",
+			})
+		end
+	},
 })
 
 
@@ -215,6 +230,8 @@ vim.keymap.set('n', '<C-s>', function()
 	vim.lsp.buf.format()
 	vim.cmd('silent write!')
 end, { silent = true })
+
+vim.keymap.set('n', '<C-w>', '<Cmd>bdelete<cr>', { silent = true })
 
 
 vim.keymap.set({ 'n', 't' }, '<F7>', '<cmd>Lspsaga term_toggle<CR>')
