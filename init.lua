@@ -1,3 +1,4 @@
+vim.o.clipboard = 'unnamedplus'
 vim.o.guifont = "Source Code Pro:h7"
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -7,6 +8,7 @@ set.softtabstop = 4
 set.shiftwidth = 4
 set.cmdheight = 0
 vim.cmd('set number')
+vim.cmd("set list! listchars=tab:\\|\\ ")
 
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 local uv = vim.uv or vim.loop
@@ -33,7 +35,6 @@ require('lazy').setup({
 	-- LSP Support
 	{
 		'VonHeikemen/lsp-zero.nvim',
-		branch = 'v3.x',
 		lazy = true,
 		config = false,
 	},
@@ -120,11 +121,11 @@ require('lazy').setup({
 	},
 	{
 		'ray-x/lsp_signature.nvim',
-		event = "VeryLazy",
 		opts = {},
 		config = function(_, opts) require 'lsp_signature'.setup(opts) end
 	},
-	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
+
+
 	{
 		"yamatsum/nvim-cursorline",
 		config = function()
@@ -140,22 +141,6 @@ require('lazy').setup({
 					hl = { underline = true },
 				}
 			}
-		end
-	},
-	{
-		"axkirillov/hbac.nvim",
-		config = function()
-			require("hbac").setup({
-				autoclose                  = true, -- set autoclose to false if you want to close manually
-				threshold                  = 3, -- hbac will start closing unedited buffers once that number is reached
-				close_command              = function(bufnr)
-					vim.api.nvim_buf_delete(bufnr, {})
-				end,
-				close_buffers_with_windows = false, -- hbac will close buffers with associated windows if this option is `true`
-				telescope                  = {
-					-- See #telescope-configuration below
-				},
-			})
 		end
 	},
 	{
@@ -180,10 +165,10 @@ require('mason-lspconfig').setup({
 		lsp_zero.default_setup,
 	},
 })
+
 require('nvim-ts-autotag').setup()
 
 local cmp = require 'cmp'
-local lspkind = require 'lspkind'
 
 
 local border_opts = {
@@ -223,7 +208,6 @@ cmp.setup {
 }
 
 require "lsp_signature".setup()
-require("ibl").setup()
 
 
 
@@ -231,6 +215,7 @@ vim.keymap.set('n', '<C-s>', function()
 	vim.lsp.buf.format()
 	vim.cmd('silent write!')
 end, { silent = true })
+
 
 vim.keymap.set({ 'n', 't' }, '<F7>', '<cmd>Lspsaga term_toggle<CR>')
 vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
@@ -240,3 +225,4 @@ vim.keymap.set('n', '<Tab>', '<Cmd>bnext<cr>', { silent = true })
 vim.keymap.set('n', '<leader>d', '<Cmd>Lspsaga diagnostic_jump_next<cr>', { silent = true })
 vim.keymap.set('n', '<leader>a', '<Cmd>Lspsaga code_action<cr>', { silent = true })
 vim.keymap.set('n', '<leader>r', '<Cmd>Lspsaga rename<cr>', { silent = true })
+vim.keymap.set('n', '<leader>h', '<Cmd>Lspsaga hover_doc<cr>', { silent = true })
