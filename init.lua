@@ -158,7 +158,8 @@ require('lazy').setup({
 				horizontal = "right",
 				icons = true,
 				display = "column",
-				vertical = "center"
+				vertical = "center",
+				timeout = 2000
 			})
 		end
 	},
