@@ -157,9 +157,8 @@ require('lazy').setup({
 			require('buffertabs').setup({
 				horizontal = "right",
 				icons = true,
-				border = "single",
-				padding = 0,
 				display = "column",
+				vertical = "center"
 			})
 		end
 	},
