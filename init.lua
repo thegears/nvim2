@@ -13,6 +13,7 @@ vim.cmd("set list! listchars=tab:\\|\\ ")
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 local uv = vim.uv or vim.loop
 
+
 -- Auto-install lazy.nvim if not present
 if not uv.fs_stat(lazypath) then
 	print('Installing lazy.nvim....')
@@ -26,6 +27,7 @@ if not uv.fs_stat(lazypath) then
 	})
 	print('Done.')
 end
+
 
 vim.opt.rtp:prepend(lazypath)
 
@@ -144,6 +146,17 @@ require('lazy').setup({
 			})
 		end
 	},
+	{
+		"Exafunction/codeium.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"hrsh7th/nvim-cmp",
+		},
+		config = function()
+			require("codeium").setup({
+			})
+		end
+	},
 })
 
 
@@ -193,13 +206,18 @@ cmp.setup {
 	formatting = {
 		fields = { "kind", "abbr", "menu" },
 		format = function(entry, vim_item)
-			local kind = require("lspkind").cmp_format({ mode = "symbol", maxwidth = 50 })(entry, vim_item)
+			local kind = require("lspkind").cmp_format({ mode = "symbol", maxwidth = 50, symbol_map = { Codeium = "", } })(
+				entry, vim_item)
 			local strings = vim.split(kind.kind, "%s", { trimempty = true })
 			kind.kind = " " .. (strings[1] or "") .. " "
 
 			return kind
 		end,
 	},
+	sources = {
+		{ name = "nvim_lsp" },
+		{ name = "codeium" }
+	}
 
 }
 
