@@ -147,14 +147,9 @@ require('lazy').setup({
 		end
 	},
 	{
-		"Exafunction/codeium.nvim",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"hrsh7th/nvim-cmp",
-		},
+		"Exafunction/codeium.vim",
 		config = function()
-			require("codeium").setup({
-			})
+	
 		end
 	},
 })
@@ -242,3 +237,6 @@ vim.keymap.set('n', '<leader>d', '<Cmd>Lspsaga diagnostic_jump_next<cr>', { sile
 vim.keymap.set('n', '<leader>a', '<Cmd>Lspsaga code_action<cr>', { silent = true })
 vim.keymap.set('n', '<leader>r', '<Cmd>Lspsaga rename<cr>', { silent = true })
 vim.keymap.set('n', '<leader>h', '<Cmd>Lspsaga hover_doc<cr>', { silent = true })
+
+vim.keymap.set('i','<C-Right>','codeium#Accept()',{ silent = true, expr = true, nowait = true })
+vim.g.codeium_disable_bindings = 1
