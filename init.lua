@@ -239,4 +239,5 @@ vim.keymap.set('n', '<leader>r', '<Cmd>Lspsaga rename<cr>', { silent = true })
 vim.keymap.set('n', '<leader>h', '<Cmd>Lspsaga hover_doc<cr>', { silent = true })
 
 vim.keymap.set('i','<C-Right>','codeium#Accept()',{ silent = true, expr = true, nowait = true })
+vim.keymap.set('i','<C-z>','<Cmd>undo<cr>',{ silent = true })
 vim.g.codeium_disable_bindings = 1
