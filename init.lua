@@ -61,7 +61,6 @@ require('lazy').setup({
 			require('lspsaga').setup({})
 		end,
 		dependencies = {
-			'nvim-treesitter/nvim-treesitter', -- optional
 			'nvim-tree/nvim-web-devicons' -- optional
 		}
 	},
@@ -96,7 +95,16 @@ require('lazy').setup({
 			},
 		},
 	},
-
+	{
+		'nvim-treesitter/nvim-treesitter',
+		config = function()
+			require('nvim-treesitter.configs').setup {
+				highlight = {
+					enable = true,
+				}
+			}
+		end,
+	},
 	{
 		"nvim-neo-tree/neo-tree.nvim",
 		version = "*",
@@ -149,7 +157,7 @@ require('lazy').setup({
 	{
 		"Exafunction/codeium.vim",
 		config = function()
-	
+
 		end
 	},
 })
@@ -237,6 +245,6 @@ vim.keymap.set('n', '<leader>a', '<Cmd>Lspsaga code_action<cr>', { silent = true
 vim.keymap.set('n', '<leader>r', '<Cmd>Lspsaga rename<cr>', { silent = true })
 vim.keymap.set('n', '<leader>h', '<Cmd>Lspsaga hover_doc<cr>', { silent = true })
 
-vim.keymap.set('i','<C-Right>','codeium#Accept()',{ silent = true, expr = true, nowait = true })
-vim.keymap.set('i','<C-z>','<Cmd>undo<cr>',{ silent = true })
+vim.keymap.set('i', '<C-Right>', 'codeium#Accept()', { silent = true, expr = true, nowait = true })
+vim.keymap.set('i', '<C-z>', '<Cmd>undo<cr>', { silent = true })
 vim.g.codeium_disable_bindings = 1
