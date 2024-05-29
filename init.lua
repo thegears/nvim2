@@ -1,5 +1,5 @@
 vim.o.clipboard = 'unnamedplus'
-vim.o.guifont = "Source Code Pro:h7"
+vim.o.guifont = "Source Code Pro:h15"
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 local set = vim.opt -- set options
@@ -32,6 +32,14 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+	{
+		'mfussenegger/nvim-lint',
+		config = function()
+			require('lint').linters_by_ft = {
+				markdown = { 'vale', }
+			}
+		end
+	},
 	{ 'williamboman/mason.nvim' },
 	{ 'williamboman/mason-lspconfig.nvim' },
 	-- LSP Support
@@ -115,6 +123,13 @@ require('lazy').setup({
 		},
 		config = function()
 			require('neo-tree').setup {
+				filesystem = {
+					filtered_items = {
+						visible = true, -- This is what you want: If you set this to `true`, all "hide" just mean "dimmed out"
+						hide_dotfiles = false,
+						hide_gitignored = true,
+					}
+				},
 				event_handlers = {
 					{
 						event = "file_opened",
@@ -160,6 +175,18 @@ require('lazy').setup({
 
 		end
 	},
+})
+
+vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+	callback = function()
+		-- try_lint without arguments runs the linters defined in `linters_by_ft`
+		-- for the current filetype
+		require("lint").try_lint()
+
+		-- You can call `try_lint` with a linter name or a list of names to always
+		-- run specific linters, independent of the `linters_by_ft` configuration
+		require("lint").try_lint("eslint_d")
+	end,
 })
 
 
