@@ -33,6 +33,16 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
 	{
+		"tversteeg/registers.nvim",
+		cmd = "Registers",
+		config = true,
+		keys = {
+			{ "\"",    mode = { "n", "v" } },
+			{ "<C-R>", mode = "i" }
+		},
+		name = "registers",
+	},
+	{
 		'mfussenegger/nvim-lint',
 		config = function()
 			require('lint').linters_by_ft = {
