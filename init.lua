@@ -32,7 +32,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-	{
+{
 		"tversteeg/registers.nvim",
 		cmd = "Registers",
 		config = true,
@@ -42,30 +42,12 @@ require('lazy').setup({
 		},
 		name = "registers",
 	},
-	{
-		'mfussenegger/nvim-lint',
-		config = function()
-			require('lint').linters_by_ft = {
-				markdown = { 'vale', }
-			}
-		end
-	},
-	{ 'williamboman/mason.nvim' },
-	{ 'williamboman/mason-lspconfig.nvim' },
-	-- LSP Support
-	{
-		'VonHeikemen/lsp-zero.nvim',
-		lazy = true,
-		config = false,
-	},
-	{
-		'neovim/nvim-lspconfig',
+		{
+		'hrsh7th/nvim-cmp',
 		dependencies = {
-			{ 'hrsh7th/cmp-nvim-lsp',
-				{ 'j-hui/fidget.nvim', tag = 'legacy', opts = {} }
-			},
-		}
-	},
+			{ 'L3MON4D3/LuaSnip' }
+		},
+		},
 	-- Autocompletion
 	{
 		'hrsh7th/nvim-cmp',
@@ -76,7 +58,11 @@ require('lazy').setup({
 	{
 		'nvimdev/lspsaga.nvim',
 		config = function()
-			require('lspsaga').setup({})
+			require('lspsaga').setup({
+				lightbulb = {
+					sign = false
+				}
+			})
 		end,
 		dependencies = {
 			'nvim-tree/nvim-web-devicons' -- optional
@@ -87,9 +73,7 @@ require('lazy').setup({
 		event = "InsertEnter",
 		opts = {} -- this is equalent to setup({}) function
 	},
-	{
-		'windwp/nvim-ts-autotag'
-	},
+
 	{
 		'AstroNvim/astrotheme',
 		priority = 1000,
@@ -112,47 +96,6 @@ require('lazy').setup({
 				section_separators = '',
 			},
 		},
-	},
-	{
-		'nvim-treesitter/nvim-treesitter',
-		config = function()
-			require('nvim-treesitter.configs').setup {
-				highlight = {
-					enable = true,
-				}
-			}
-		end,
-	},
-	{
-		"nvim-neo-tree/neo-tree.nvim",
-		version = "*",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-			"MunifTanjim/nui.nvim",
-		},
-		config = function()
-			require('neo-tree').setup {
-				filesystem = {
-					filtered_items = {
-						visible = true, -- This is what you want: If you set this to `true`, all "hide" just mean "dimmed out"
-						hide_dotfiles = false,
-						hide_gitignored = true,
-					}
-				},
-				event_handlers = {
-					{
-						event = "file_opened",
-						handler = function()
-							require("neo-tree.command").execute({ action = "close" })
-						end
-					},
-				},
-				window = {
-					position = "float"
-				}
-			}
-		end,
 	},
 	{
 		'ray-x/lsp_signature.nvim',
@@ -185,37 +128,45 @@ require('lazy').setup({
 
 		end
 	},
-})
-
-vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-	callback = function()
-		-- try_lint without arguments runs the linters defined in `linters_by_ft`
-		-- for the current filetype
-		require("lint").try_lint()
-
-		-- You can call `try_lint` with a linter name or a list of names to always
-		-- run specific linters, independent of the `linters_by_ft` configuration
-		require("lint").try_lint("eslint_d")
-	end,
-})
-
-
-local lsp_zero = require('lsp-zero')
-
-lsp_zero.on_attach(function(_, bufnr)
-	-- see :help lsp-zero-keybindings
-	-- to learn the available actions
-	lsp_zero.default_keymaps({ buffer = bufnr })
-end)
-
-require('mason').setup({})
-require('mason-lspconfig').setup({
-	handlers = {
-		lsp_zero.default_setup,
+	{
+		'neovim/nvim-lspconfig',
+		dependencies = {
+			{ 'hrsh7th/cmp-nvim-lsp'},
+		}
+	},
+	{
+		"nvim-neo-tree/neo-tree.nvim",
+		version = "*",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+			"MunifTanjim/nui.nvim",
+		},
+		config = function()
+			require('neo-tree').setup {
+				filesystem = {
+					filtered_items = {
+						visible = true, -- This is what you want: If you set this to `true`, all "hide" just mean "dimmed out"
+						hide_dotfiles = false,
+						hide_gitignored = true,
+					}
+				},
+				event_handlers = {
+					{
+						event = "file_opened",
+						handler = function()
+							require("neo-tree.command").execute({ action = "close" })
+						end
+					},
+				},
+				window = {
+					position = "float"
+				}
+			}
+		end,
 	},
 })
 
-require('nvim-ts-autotag').setup()
 
 local cmp = require 'cmp'
 
@@ -259,6 +210,24 @@ cmp.setup {
 	}
 
 }
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+local lspconfig = require('lspconfig')
+
+lspconfig.tsserver.setup {
+  capabilities = capabilities,
+}
+
+lspconfig.eslint.setup({
+  capabilities = capabilities,
+  on_attach = function(client, bufnr)
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      buffer = bufnr,
+      command = "EslintFixAll",
+    })
+  end,
+})
 
 require "lsp_signature".setup()
 
