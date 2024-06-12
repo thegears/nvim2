@@ -1,5 +1,5 @@
 vim.o.clipboard = 'unnamedplus'
-vim.o.guifont = "Source Code Pro:h15"
+vim.o.guifont = "Source Code Pro:h9"
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 local set = vim.opt -- set options
@@ -246,7 +246,7 @@ vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<cr>', { desc = 'Neotree', silent = true })
 vim.keymap.set('n', '<leader>b', '<Cmd>Neotree buffers toggle<cr>', { desc = 'Neotree', silent = true })
 vim.keymap.set('n', '<Tab>', '<Cmd>bnext<cr>', { silent = true })
-vim.keymap.set('n', '<leader>d', '<Cmd>Lspsaga diagnostic_jump_next<cr>', { silent = true })
+vim.keymap.set('n', '<leader>d', '<Cmd>Lspsaga show_workspace_diagnostics<cr>', { silent = true })
 vim.keymap.set('n', '<leader>a', '<Cmd>Lspsaga code_action<cr>', { silent = true })
 vim.keymap.set('n', '<leader>r', '<Cmd>Lspsaga rename<cr>', { silent = true })
 vim.keymap.set('n', '<leader>h', '<Cmd>Lspsaga hover_doc<cr>', { silent = true })
