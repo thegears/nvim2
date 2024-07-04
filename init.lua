@@ -135,6 +135,9 @@ require('lazy').setup({
 		}
 	},
 	{
+		'yioneko/nvim-vtsls'
+	},
+	{
 		"nvim-neo-tree/neo-tree.nvim",
 		version = "*",
 		dependencies = {
@@ -215,19 +218,10 @@ cmp.setup {
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 local lspconfig = require('lspconfig')
+require("lspconfig.configs").vtsls = require("vtsls").lspconfig
 
-lspconfig.tsserver.setup {
-  capabilities = capabilities,
-}
+require("lspconfig").vtsls.setup({ 
 
-lspconfig.eslint.setup({
-  capabilities = capabilities,
-  on_attach = function(client, bufnr)
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      buffer = bufnr,
-      command = "EslintFixAll",
-    })
-  end,
 })
 
 lspconfig.gopls.setup {
