@@ -75,13 +75,13 @@ require('lazy').setup({
 	},
 
 	{
-		'AstroNvim/astrotheme',
+		'Shatur/neovim-ayu',
 		priority = 1000,
 		config = function()
-			require("astrotheme").setup {
+			require("ayu").setup {
 				palette = "astrodark",
 			}
-			vim.cmd.colorscheme 'astrotheme'
+			vim.cmd.colorscheme 'ayu'
 		end,
 	},
 	{
@@ -206,7 +206,8 @@ cmp.setup {
 		end,
 	},
 	sources = {
-		{ name = "nvim_lsp" },
+		{ name = 'nvim_lsp' },
+		{ name = 'buffer' },
 	}
 
 }
@@ -228,6 +229,21 @@ lspconfig.eslint.setup({
     })
   end,
 })
+
+lspconfig.gopls.setup {
+	capabilities = capabilities
+}
+
+lspconfig.rust_analyzer.setup {
+    settings = {
+        ['rust-analyzer'] = {
+            diagnostics = {
+                enable = true;
+            }
+        }
+    },
+	capabilities = capabilities
+}
 
 require "lsp_signature".setup()
 
